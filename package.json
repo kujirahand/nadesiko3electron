@@ -1,0 +1,30 @@
+{
+  "name": "nadesiko3electron",
+  "productName": "nadesiko3",
+  "version": "1.0.0",
+  "description": "Nadesiko3 packager for electron",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64 --overwrite",
+    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kujirahand/nadesiko3electron.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kujirahand/nadesiko3electron/issues"
+  },
+  "homepage": "https://github.com/kujirahand/nadesiko3electron#readme",
+  "devDependencies": {
+    "electron-packager": "^15.4.0"
+  },
+  "dependencies": {
+    "electron": "^17.0.0"
+  }
+}
