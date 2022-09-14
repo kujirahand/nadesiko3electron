@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64 --overwrite",
+    "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",
     "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/kujirahand/nadesiko3electron#readme",
   "devDependencies": {
-    "electron-packager": "^15.4.0"
+    "electron-packager": "^16.0.0"
   },
   "dependencies": {
-    "electron": "^17.0.0"
+    "electron": "^6.1.12"
   }
 }
