@@ -102,82 +102,24 @@ function sendPost(url, params, callback, sys) {
   })
 }
 
-function nako3_fileSave(cb, value, name, sys) {
-  sendPost('/api', {
-    func: 'save',
-    name: name,
-    value: value
-  }, data => {
-    console.log(data)
-    cb(data)
-  }, sys)
-}
-
-function nako3_fileLoad(cb, name, sys) {
-  sendPost('/api', {
-    func: 'load',
-    name: name,
-  }, data => {
-    console.log(data)
-    sys.__v0['対象'] = data.value
-    cb(data)
-  }, sys)
-}
-
-function nako3_files(cb, sys) {
-  sendPost('/api', {
-    func: 'files',
-  }, data => {
-    console.log(data)
-    sys.__v0['対象'] = data.value.split(',')
-    cb(data)
-  }, sys)
-}
-
 //---------------------------------
 // 独自関数の登録
 const nako3_add_func = function () {
-  /*
-  // Server経由のAPI
-  navigator.nako3.setFunc("ファイル保存時", [['で'], ['を'],['へ', 'に']], nako3_fileSave, true)
-  navigator.nako3.setFunc("ファイル読時", [['で'],['を', 'の', 'から']], nako3_fileLoad, true)
-  navigator.nako3.setFunc("ファイル一覧取得時", [['で']], nako3_files, true)
-  */
-  navigator.nako3.setFunc("表示", [['の', 'を', 'と']], nako3_print, true)
-  navigator.nako3.setFunc("コンソール表示", [['の', 'を', 'と']], (s) => console.log(s), true)
-  navigator.nako3.setFunc("表示ログクリア", [], nako3_clear, true)
-  /*
-  // lorcaにバインドされたAPI
-  navigator.nako3.setFunc("起動時", [['の'], ['を', 'で']], 
-    (cb, path, sys) => {
-      const args = typeof(path) == 'string' ? [path] : path
-      Nako3api_exec(args).then(r => {
-        sys.__v0['対象'] = r;
-        cb(r) 
-      })
-    }, true)
-  navigator.nako3.setFunc("ファイル保存時", [['で'], ['を'], ['へ', 'に']], 
-    (cb, value, name, sys) => Nako3api_save(name, value).then(r => { sys.__v0['対象'] = r; cb(r) }, true))
-  navigator.nako3.setFunc("ファイル読時", [['で'], ['を', 'の', 'から']], 
-    (cb, name, sys) => Nako3api_load(name).then(r => { sys.__v0['対象'] = r; cb(r) }), true)
-  navigator.nako3.setFunc("ファイル一覧取得時", [['で']], 
-    (cb, sys) => Nako3api_files().then(r => { sys.__v0['対象'] = r; cb(r) }), true)
-  navigator.nako3.setFunc("環境変数取得時", [['で'], ['の']], 
-    (cb, key, sys) => Nako3api_getenv(key).then(r => { sys.__v0['対象'] = r; cb(r) }), true)
-  navigator.nako3.setFunc("環境変数設定時", [['で'], ['に','へ'], ['を']], 
-    (cb, key, val) => Nako3api_setenv(key, val).then(r => cb(r)), true)
-  navigator.nako3.setFunc("環境変数一覧取得時", [['で']], 
-    (cb, sys) => Nako3api_envlist().then(results => {
-      const obj = {}
-      for (let line of results) {
-        const a = line.split('=', 2)
-        obj[a[0]] = a[1]
-      }
-      sys.__v0['対象'] = obj;
-      cb(obj) 
-  }), true)
-  navigator.nako3.setFunc("内部情報取得時", [['で']], 
-    (cb, sys) => Nako3api_info().then(r => { sys.__v0['対象'] = JSON.parse(r); cb(r) }), true)
-  */
+  //
+  navigator.nako3.addFunc("表示", [['の', 'を', 'と']], nako3_print, true)
+  navigator.nako3.addFunc("コンソール表示", [['の', 'を', 'と']], (s) => console.log(s), true)
+  navigator.nako3.addFunc("表示ログクリア", [], nako3_clear, true)
+  // api
+  navigator.nako3.addFunc('起動', [['を', 'で']], async (cmd, _sys) => await window.nako3api.exec(cmd), false, true)
+  navigator.nako3.setFunc("ファイル保存", [['を'], ['へ', 'に']], 
+    async (value, name, _sys) => await window.nako3api.fileSave(name, value), true, true)
+  navigator.nako3.setFunc("ファイル読", [['を', 'の', 'から']], 
+    async (name, _sys) => await window.nako3api.fileLoad(name), false, true)
+  navigator.nako3.setFunc("ファイル一覧取得", [], 
+    async (_sys) => await window.nako3api.enumfiles(), false, true)
+  navigator.nako3.setFunc("環境変数取得", [['の']], 
+    async (key, _sys) => await window.nako3api.env(key), false, true)
+  navigator.nako3.setFunc("環境変数一覧取得", [], 
+    async (_sys) => await window.nako3api.envlist(), false, true)
 }
 //---------------------------------

@@ -1,3 +1,9 @@
+/*! ./nako_core_version.mjs */
+
+/*! ./nako_errors.mjs */
+
+/*! ./nako_gen.mjs */
+
 /*!*******************************!*\
   !*** ./core/src/nako_gen.mjs ***!
   \*******************************/

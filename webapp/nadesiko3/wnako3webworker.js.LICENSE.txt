@@ -1,3 +1,75 @@
+/*! ../core/src/nako3.mjs */
+
+/*! ../src/nako_errors.mjs */
+
+/*! ./nako_colors.mjs */
+
+/*! ./nako_core_version.mjs */
+
+/*! ./nako_csv.mjs */
+
+/*! ./nako_errors.mjs */
+
+/*! ./nako_from_dncl.mjs */
+
+/*! ./nako_from_dncl2.mjs */
+
+/*! ./nako_gen.mjs */
+
+/*! ./nako_gen_async.mjs */
+
+/*! ./nako_global.mjs */
+
+/*! ./nako_indent_chars.mjs */
+
+/*! ./nako_indent_inline.mjs */
+
+/*! ./nako_josi_list.mjs */
+
+/*! ./nako_lex_rules.mjs */
+
+/*! ./nako_lexer.mjs */
+
+/*! ./nako_logger.mjs */
+
+/*! ./nako_parser3.mjs */
+
+/*! ./nako_parser_base.mjs */
+
+/*! ./nako_parser_const.mjs */
+
+/*! ./nako_prepare.mjs */
+
+/*! ./nako_reserved_words.mjs */
+
+/*! ./nako_source_mapping.mjs */
+
+/*! ./nako_tools.mjs */
+
+/*! ./nako_types.mjs */
+
+/*! ./plugin_browser_ajax.mjs */
+
+/*! ./plugin_browser_color.mjs */
+
+/*! ./plugin_browser_html.mjs */
+
+/*! ./plugin_browser_in_worker.mjs */
+
+/*! ./plugin_browser_websocket.mjs */
+
+/*! ./plugin_csv.mjs */
+
+/*! ./plugin_math.mjs */
+
+/*! ./plugin_promise.mjs */
+
+/*! ./plugin_system.mjs */
+
+/*! ./plugin_test.mjs */
+
+/*! ./plugin_worker.mjs */
+
 /*!****************************!*\
   !*** ./core/src/nako3.mjs ***!
   \****************************/

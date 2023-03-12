@@ -1,3 +1,9 @@
+/*! ./image_turtle-elephant.mjs */
+
+/*! ./image_turtle-panda.mjs */
+
+/*! ./image_turtle64.mjs */
+
 /*!*******************************!*\
   !*** ./src/plugin_turtle.mjs ***!
   \*******************************/
