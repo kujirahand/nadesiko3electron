@@ -14,10 +14,11 @@
 
 - [nadesiko3electron/releases](https://github.com/kujirahand/nadesiko3electron/releases)
 
-そして、webapp/main.nako3 を編集します。これがメインファイルです。
+そして、解凍したらファイルを編集します。
+`resources/app/webapp/main.nako3`がメインファイルです。
 このファイルに実行したいなでしこのプログラムを記述します。
 
-## コマンドラインから最新版をビルドする方法
+## (詳細な方法) コマンドラインから最新版をビルドする方法
 
 最初に、[Node.js](https://nodejs.org/ja/)をインストールしてください。インストール後、コマンドライン(PowerShellまたはTerminal.app)で以下を実行しましょう。
 
@@ -27,8 +28,7 @@ cd nadesiko3electron
 npm install
 ```
 
-そして、webapp以下に梱包したいファイルを配置します。
-webapp/main.nako3がメインファイルです。
+そして、webapp/main.nako3 を編集します。これがメインファイルです。
 このファイルに実行したいなでしこのプログラムを記述します。
 
 ### ビルドしよう
