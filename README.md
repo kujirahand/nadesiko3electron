@@ -31,9 +31,7 @@ npm install
 そして、webapp/main.nako3 を編集します。これがメインファイルです。
 このファイルに実行したいなでしこのプログラムを記述します。
 
-### ビルドしよう
-
-Windowsなら`npm run build:win`を実行します。macOSなら`npm run build:mac`を実行します。
+それから、Windowsなら`npm run build:win`を実行します。macOSなら`npm run build:mac`を実行します。
 
 ```
 $ npm run build:win
