@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",
-    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite",
+    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite"
   },
   "repository": {
     "type": "git",
