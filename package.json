@@ -1,9 +1,10 @@
 {
   "name": "nadesiko3electron",
   "productName": "nadesiko3",
-  "version": "3.4.13",
+  "version": "3.4.20",
   "description": "Nadesiko3 packager for electron",
-  "main": "index.js",
+  "main": "main.cjs",
+  "type": "module",
   "scripts": {
     "start": "electron .",
     "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",

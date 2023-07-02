@@ -1,70 +1,43 @@
-'use strict'
-
-const path = require('path')
-const fs = require('fs')
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
-const util = require('util')
-const childProcess = require('node:child_process')
-const quote = require('shell-quote').quote
+import path from 'path'
+import fs from 'fs'
+import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
+import util from 'util'
+import childProcess from 'node:child_process'
+import { quote } from 'shell-quote'
+import { createMenu } from './menu.js'
 
 // 設定ファイルを読む
 const config = loadConfig()
 const appId = config.appid
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') { app.quit() }
-})
-
-app.on('ready', () => {
-  // メニューをアプリケーションに追加
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    {
-      label: 'ファイル',
-      submenu: [
-        {
-          label: '終了',
-          accelerator: 'Ctrl+Q',
-          click: () => app.quit()
-        }
-      ]
-    },
-    {
-      label: '表示',
-      submenu: [
-        {
-          label: '更新',
-          accelerator: 'F5',
-          click: () => BrowserWindow.getFocusedWindow().reload()
-        }
-      ]
-    },
-    {
-      label: 'ツール',
-      submenu: [
-        {
-          label: '開発者ツール',
-          accelerator: 'Ctrl+Shift+I',
-          click: () => BrowserWindow.getFocusedWindow().toggleDevTools()
-        }
-      ]
-    },
-    {
-      label: 'ヘルプ',
-      submenu: [
-        {
-          label: 'バージョン情報',
-          click: () => {
-            let win = new BrowserWindow({ width: 325, height: 100 })
-            win.loadURL('file://' + path.join(__dirname, '..', 'demo', 'version.html'))
-            win.on('closed', () => {
-              win = null
-            })
-          }
-        }
-      ]
+function createWindow() {
+  // ブラウザ (Chromium) の起動, 初期画面のロード
+  let win = new BrowserWindow({
+    width: config.width,
+    height: config.height,
+    title: config.title,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.cjs')
     }
-  ]))
+  })
+  win.loadURL('file://' + path.join(__dirname, 'webapp', 'index.html'))
+  win.on('closed', () => {
+    win = null
+  })
+  // 新しいウィンドウを開こうとした際の処理
+  win.webContents.on('new-window', (e, url) => {
+    console.log(url)
+    shell.openExternal(url)
+  });
+  win.webContents.on('will-navigate', (e, url) => {
+    // リンククリック時の処理
+    console.log(url)
+    shell.openExternal(url)
+  });
+  return win
+}
 
+function setIPCHandle () {
   // ipc通信
   ipcMain.handle('exec', async (_event, args) => {
     // args
@@ -80,12 +53,12 @@ app.on('ready', () => {
   ipcMain.handle('fileLoad', async (_event, filename) => {
     const fname = path.join(getUserDataDir(), removePathFlag(filename))
     const readFile = util.promisify(fs.readFile)
-    return await readFile(fname, {encoding: 'utf-8'})
+    return await readFile(fname, { encoding: 'utf-8' })
   })
   ipcMain.handle('fileSave', async (_event, filename, data) => {
     const fname = path.join(getUserDataDir(), removePathFlag(filename))
     const writeFile = util.promisify(fs.writeFile)
-    return await writeFile(fname, data, {encoding: 'utf-8'})
+    return await writeFile(fname, data, { encoding: 'utf-8' })
   })
   ipcMain.handle('enumfiles', async (_event) => {
     const dir = getUserDataDir()
@@ -101,19 +74,20 @@ app.on('ready', () => {
   ipcMain.on('log', (_event, msg) => {
     console.log(msg)
   })
+}
 
-  // ブラウザ (Chromium) の起動, 初期画面のロード
-  let win = new BrowserWindow({
-    width: config.width,
-    height: config.height,
-    title: config.title,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+app.whenReady().then(() => {
+  let win = createWindow()
+  setIPCHandle()
+  createMenu(win)
+
+  app.on('activate', function () {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-  win.loadURL('file://' + path.join(__dirname, 'webapp', 'index.html'))
-  win.on('closed', () => {
-    win = null
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') { app.quit() }
   })
 })
 
