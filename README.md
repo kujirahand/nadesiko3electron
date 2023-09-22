@@ -14,9 +14,14 @@
 
 - [nadesiko3electron/releases](https://github.com/kujirahand/nadesiko3electron/releases)
 
-そして、解凍したらファイルを編集します。
-`resources/app/webapp/main.nako3`がメインファイルです。
+そして、解凍したら下記のファイルを編集します。
+
+- (Windows) `resources/app/webapp/main.nako3`
+- (macOS) `Contents/Resources/app/webapp/main.nako3`
+
 このファイルに実行したいなでしこのプログラムを記述します。
+
+なお、macOSではFinderでnadesiko3.appを選択して、右クリックメニューより「パッケージの内容を表示」をクリックしてください。
 
 ## (詳細な方法) コマンドラインから最新版をビルドする方法
 
