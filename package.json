@@ -3,7 +3,7 @@
   "productName": "nadesiko3",
   "version": "3.4.21",
   "description": "Nadesiko3 packager for electron",
-  "main": "main.cjs",
+  "main": "start.cjs",
   "type": "module",
   "scripts": {
     "start": "electron .",
@@ -26,6 +26,9 @@
     "electron-packager": "^17.1.1"
   },
   "dependencies": {
+    "iconv-lite": "^0.6.3",
+    "node-fetch": "^3.3.2",
+    "opener": "^1.5.2",
     "shell-quote": "^1.8.0"
   }
 }
