@@ -9,4 +9,9 @@ contextBridge.exposeInMainWorld('nako3api', {
     enumfiles: () => ipcRenderer.invoke('enumfiles'),
     env: (key) => ipcRenderer.invoke('env', key),
     envlist: () => ipcRenderer.invoke('envlist'),
+    sendData: (key, data) => ipcRenderer.send('renderer-send', key, data),
+    sendDataSync: (key, data) => ipcRenderer.sendSync('renderer-send', key, data),
+    invokeData: (key, data) => ipcRenderer.invoke('renderer-invoke', key, data),
+    onData: (callback) => ipcRenderer.on('main-send', callback),
+    handleData: (callback) => ipcRenederer.handle('main-invoke', callback),
 })

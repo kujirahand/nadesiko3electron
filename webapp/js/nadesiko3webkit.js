@@ -109,17 +109,5 @@ const nako3_add_func = function () {
   navigator.nako3.addFunc("表示", [['の', 'を', 'と']], nako3_print, true)
   navigator.nako3.addFunc("コンソール表示", [['の', 'を', 'と']], (s) => console.log(s), true)
   navigator.nako3.addFunc("表示ログクリア", [], nako3_clear, true)
-  // api
-  navigator.nako3.addFunc('起動', [['を', 'で']], async (cmd, _sys) => await window.nako3api.exec(cmd), false, true)
-  navigator.nako3.setFunc("ファイル保存", [['を'], ['へ', 'に']], 
-    async (value, name, _sys) => await window.nako3api.fileSave(name, value), true, true)
-  navigator.nako3.setFunc("ファイル読", [['を', 'の', 'から']], 
-    async (name, _sys) => await window.nako3api.fileLoad(name), false, true)
-  navigator.nako3.setFunc("ファイル一覧取得", [], 
-    async (_sys) => await window.nako3api.enumfiles(), false, true)
-  navigator.nako3.setFunc("環境変数取得", [['の']], 
-    async (key, _sys) => await window.nako3api.env(key), false, true)
-  navigator.nako3.setFunc("環境変数一覧取得", [], 
-    async (_sys) => await window.nako3api.envlist(), false, true)
 }
 //---------------------------------
