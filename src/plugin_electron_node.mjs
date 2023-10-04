@@ -26,8 +26,9 @@ export default {
                 appId: appIdDef,
                 convertBrowserWindow: {
     '幅' : { key: 'width' },
-    '高さ' : { key: 'heigth' },
-    '高' : { key: 'heigth' },
+    '高さ' : { key: 'height' },
+    '高' : { key: 'height' },
+    'コンテントサイズ適用': { key: 'useContentSize', isBool: true },
     '中央表示': { key: 'center', isBool: true },
     'センタリング': { key: 'center', isBool: true },
     '最小幅': { key: 'minWidth' },
@@ -51,12 +52,14 @@ export default {
                 },
                 convertWebPreferences: {
     '開発ツール': { key: 'devTools', isBool: true },
+    '開発者ツール': { key: 'devTools', isBool: true },
     'ノード統合': { key: 'nodeIntegration', isBool: true },
     'NODE統合': { key: 'nodeIntegration', isBool: true },
     'サンドボックス': { key: 'sandbox', isBool: true },
     'コンテキスト分離': { key: 'contextIsolation', isBool: true },
     'ダイアログ保護': { key: 'safeDialogs', isBool: true },
     'DIALOG保護': { key: 'safeDialogs', isBool: true },
+    'WEBGL': { key: 'webgl', isBool: true },
                 },
                 convertMenuTemplate: {
     'ロール': { key: 'role' },
@@ -68,6 +71,7 @@ export default {
     'SUBLABEL': { key: 'sublabel' },
     'ツールチップ': { key: 'toolTip' },
     'アクセラレータ': { key: 'accelerator' },
+    'アクセラレーター': { key: 'accelerator' },
     'アイコン': { key: 'icon' },
     '有効': { key: 'enabled', isBool: true },
     '表示': { key: 'visible', isBool: true },
@@ -76,6 +80,47 @@ export default {
     'SUBMENU': { isCallback: true },
     'submenu': { isCallback: true },
     'ID': { key: 'id' },
+                },
+                convertMenuPopupOptions: {
+    'ウインドウ': { key: 'window' },
+    'WINDOW': { key: 'window' },
+    'X': { key: 'x' },
+    'Y': { key: 'y' },
+    '項目位置': { key: 'positioningItem' },
+    'コールバック': { key: 'callback' },
+    'CALLBACK': { key: 'callback' },
+                },
+                convertRelaunchOptions: {
+    '引数': { key: 'args' },
+    'ARGS': { key: 'args' },
+    '実行ファイル': { key: 'execPath' },
+    'EXECPATH': { key: 'execPath' },
+                },
+                p2point: (p) => {
+                    let point = p
+                    if (Array.isArray(p) && p.length === 2) {
+                        point = { x: p[0], y: p[1] }
+                    } else {
+                        const point = {
+                            x: p.x!=null?p.x:p.X!=null?p.X:undefined,
+                            y: p.y!=null?p.y:p.Y!=null?p.Y:undefined,
+                        }
+                    }
+                    return point
+                },
+                r2rect: (r) => {
+                    let rect = r
+                    if (Array.isArray(r) && p.length === 4) {
+                        rect = { x: r[0], y: r[1], width: r[2], height: r[3] }
+                    } else {
+                        rect = {
+                            x: r.x!=null?r.x:r.X!=null?r.X:undefined,
+                            y: r.y!=null?r.y:r.Y!=null?r.Y:undefined,
+                            width: r.w!=null?r.w:r.WIDTH!=null?r.WIDTH:r.width!=null?r.width:undefined,
+                            height: r.h!=null?r.h:r.HEIGHT!=null?r.HEIGHT:r.height!=null?r.height:undefined,
+                        }
+                    }
+                    return rect
                 },
                 convertOptions: (opts, tbl, popts, callback) => {
                     for (const key of Object.keys(popts)) {
@@ -147,8 +192,11 @@ export default {
             }
         }
     },
-    'Eアプリ': { type: 'const', value: app },
-    'アプリID設定': {
+    // @システム定数
+    'Eアプリ': { type: 'const', value: app }, // @Eあぷり
+    'IPCメイン': { type: 'const', value: ipcMain }, // @IPCめいん
+    // @Electronアプリ
+    'アプリID設定': { // @アプリIDを設定する // @あぷりIDせってい
         type: 'func',
         josi: [['に','を']],
         pure: true,
@@ -157,15 +205,7 @@ export default {
         },
         return_none: true
     },
-    'PRELOAD作成': {
-        type: 'func',
-        josi: [['から','を'], ['に']],
-        pure: true,
-        fn: function (data, file, sys) {
-            
-        }
-    },
-    'QUIT': {
+    'QUIT': { // @Electronのアプリを終了する // @QUIT
         type: 'func',
         josi: [],
         pure: true,
@@ -174,42 +214,82 @@ export default {
         },
         return_none: true
     },
-    '全ウインドウ数取得': {
+    '終了': { // @Electronのアプリを終了する // @しゅうりょう
         type: 'func',
         josi: [],
         pure: true,
         fn: function (sys) {
-            return BrowserWindow.getAllWindows().length
-        }
+            app.quit()
+        },
+        return_none: true
     },
-    'フォーカスウインドウ取得': {
+    '強制終了': { // @Electronのアプリを強制終了する // @きょうせいしゅうりょう
+        type: 'func',
+        josi: [['で']],
+        pure: true,
+        fn: function (code, sys) {
+            app.exit(code)
+        },
+        return_none: true
+    },
+    '再起動予約': { // @アプリが終了した際に自動的に起動する // @さいきどうよやく
+        type: 'func',
+        josi: [['で']],
+        pure: true,
+        fn: function (popts, sys) {
+            const opts = {}
+            const tbl = sys.__enako3.convertRelaunchOptions
+            sys.__enako3.convertOptions(opts, tbl, popts, null)
+            app.relaunch(opts)
+        },
+        return_none: true
+    },
+    'Eアプリ準備完了': { // @アプリの準備が完了していれば真を返す // @Eあぷりじゅんびかんりょう
         type: 'func',
         josi: [],
         pure: true,
         fn: function (sys) {
-            return BrowserWindow.getFocusedWindow()
+            return app.isReady()
         }
     },
-    'ウインドウ再読込': {
+    'Eアプリ準備完了時': { // @アプリの準備が完了した際に呼び去られる処理を登録する // @Eあぷりじゅんびかんりょうしたとき
         type: 'func',
-        josi: [['を']],
+        josi: [['で']],
         pure: true,
-        fn: function (win, sys) {
-            win.reload()
+        fn: function (callback, sys) {
+            app.whenReady().then(() => {
+                callback(sys)
+            })
         },
         return_none: true
     },
-    '開発ツールトグル': {
+    'Eアプリフォーカス獲得': { // @アプリがフォーカスの獲得を試みる // @Eあぷりふぉーかすかくとく
         type: 'func',
-        josi: [['を','の']],
+        josi: [],
         pure: true,
-        fn: function (win, sys) {
-            win.toggleDevTools()
+        fn: function (sys) {
+            app.focus()
         },
         return_none: true
     },
-
-    'ブラウザウインドウ作成': {
+    'Eアプリバージョン取得': { // @package.jsonで設定しているアプリのバージョンを返す // @Eあぷりばーじょんしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return app.getVersion()
+        }
+    },
+    'Eアプリ名取得': { // @package.jsonで設定しているアプリの名前(name,productName)を返す // @Eあぷりめいしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return app.getName()
+        }
+    },
+    // @ElectronのBrowserWindow
+    'ブラウザウインドウ作成': { // @オプションに従いブラウザウインドウを作成して返す // @ぶらうざういんどうさくせい
         type: 'func',
         josi: [['で','から']],
         pure: true,
@@ -238,7 +318,7 @@ export default {
             return new BrowserWindow(opts)
         }
     },
-    'ブラウザ読込': {
+    'ブラウザ読込': { // @ウインドウに指定のURLから読み込みを行う // @ぶらうざよみこみ
         type: 'func',
         josi: [['に','へ'], ['から','を']],
         pure: true,
@@ -253,7 +333,60 @@ export default {
         },
         return_none: true
     },
-    'アプリメニュー設定': {
+    '全ウインドウ数取得': { // @アプリに存在する全てのWindowの数を返す // @ぜんういんどうすうしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return BrowserWindow.getAllWindows().length
+        }
+    },
+    'フォーカスウインドウ取得': { // @フォーカスを獲得しているWindowを返す // @ふぉーかすういんどうしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return BrowserWindow.getFocusedWindow()
+        }
+    },
+    'ウインドウ再読込': { // @指定したウインドウの再読み込みを行う // @ういんどうさいよみこみ
+        type: 'func',
+        josi: [['を']],
+        pure: true,
+        fn: function (win, sys) {
+            win.reload()
+        },
+        return_none: true
+    },
+    'ウインドウ表示': { // @指定したウインドウを表示状態にする // @ういんどうひょうじ
+        type: 'func',
+        josi: [['を','の']],
+        pure: true,
+        fn: function (win, sys) {
+            win.show()
+        },
+        return_none: true
+    },
+    '開発ツールトグル': { // @指定したウインドウの開発者ツールの表示状態をトグルする // @かいはつつーるとぐる
+        type: 'func',
+        josi: [['を','の']],
+        pure: true,
+        fn: function (win, sys) {
+            win.toggleDevTools()
+        },
+        return_none: true
+    },
+    'メニュー設定': { // @menuをウインドウのメニューに設定する // @めにゅーせってい
+        type: 'func',
+        josi: [['に'],['を']],
+        pure: true,
+        fn: function (win, menu, sys) {
+            win.setMenu(menu)
+        },
+        return_none: true
+    },
+    // @Electronのメニュー
+    'アプリメニュー設定': { // @menuをアプリのメインメニューに設定する // @あぷりめにゅーせってい
         type: 'func',
         josi: [['を']],
         pure: true,
@@ -267,20 +400,27 @@ export default {
         josi: [['を']],
         pure: true,
         fn: function (menu, sys) {
-            return this["アプリメニュー設定"].fn(menu, sys)
+            Menu.setApplicationMenu(menu)
         },
         return_none: true
     },
-    'メニュー設定': {
+    'アプリメニュー取得': { // @アプリのメインメニューに取得して返す // @あぷりめにゅーしゅとく
         type: 'func',
-        josi: [['に'],['を']],
+        josi: [],
         pure: true,
-        fn: function (win, menu, sys) {
-            win.setMenu(menu)
-        },
-        return_none: true
+        fn: function (sys) {
+            return Menu.getApplicationMenu()
+        }
     },
-    'メニュー一括作成': {
+    'アプリケーションメニュー取得': {
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return Menu.getApplicationMenu()
+        }
+    },
+    'メニュー一括作成': { // @メニューをテンプレートから一括作成し作成したメニューを返す // @めにゅーいっかつさくせい
         type: 'func',
         josi: [['から']],
         pure: true,
@@ -303,7 +443,65 @@ export default {
             return Menu.buildFromTemplate(opts)
         },
     },
-    'メニューアイテム取得': {
+    'メニューポップアップ開': { // @メニューをポップアップメニューとして開く // @めにゅーぽっぷあっぷひらく
+        type: 'func',
+        josi: [['を'],['で']],
+        pure: true,
+        fn: function (menu, popts, sys) {
+            const opts = {}
+            const tbl = sys.__enako3.convertMenuPopupOptions
+            sys.__enako3.convertOptions(opts, tbl, popts, null)
+            menu.popup(opts)
+        },
+        return_none: true
+    },
+    'メニューポップアップ閉': { // @ポップアップメニューとして開かれたこのメニューを閉じる // @めにゅーぽっぷあっぷとじる
+        type: 'func',
+        josi: [['を'],['の']],
+        pure: true,
+        fn: function (menu, win, sys) {
+            if (win == null) { win = undefined }
+            menu.closePopup(win)
+        },
+        return_none: true
+    },
+    'メニューアイテム追加': { // @メニューにメニュー項目を追加する // @めにゅーあいてむついか
+        type: 'func',
+        josi: [['に'],['を']],
+        pure: true,
+        fn: function (menu, item, sys) {
+            menu.append(item)
+        },
+        return_none: true
+    },
+    'メニュー項目追加': { // @メニューにメニュー項目を追加する // @めにゅーこうもくついか
+        type: 'func',
+        josi: [['に'],['を']],
+        pure: true,
+        fn: function (menu, item, sys) {
+            menu.append(item)
+        },
+        return_none: true
+    },
+    'メニューアイテム挿入': { // @メニューの指定位置にメニュー項目を挿入する // @めにゅーあいてむそうにゅう
+        type: 'func',
+        josi: [['の'],['に'],['を']],
+        pure: true,
+        fn: function (menu, pos, item, sys) {
+            menu.insert(pos, item)
+        },
+        return_none: true
+    },
+    'メニュー項目挿入': { // @メニューの指定位置にメニュー項目を挿入する // @めにゅーこうもくそうにゅう
+        type: 'func',
+        josi: [['の'],['に'],['を']],
+        pure: true,
+        fn: function (menu, pos, item, sys) {
+            menu.insert(pos, item)
+        },
+        return_none: true
+    },
+    'メニューアイテム取得': { // @メニューから指定したIDを持つメニューアイテムを返す // @めにゅーあいてむしゅとく
         type: 'func',
         josi: [['から'],['を','の']],
         pure: true,
@@ -311,19 +509,7 @@ export default {
             return menu.getMenuItemById(id)
         },
     },
-    'Eアプリ準備完了時': {
-        type: 'func',
-        josi: [['で']],
-        pure: true,
-        fn: function (callback, sys) {
-            app.whenReady().then(() => {
-                callback(sys)
-            })
-        },
-        return_none: true
-    },
-
-    'メニューIDクリック時': {
+    'メニューIDクリック時': { // @メニューから指定したIDを持つ項目をクリックした時の処理を登録する // @めにゅーIDくりっくしたとき
         type: 'func',
         josi: [['で'],['の'],['を']],
         pure: true,
@@ -333,8 +519,31 @@ export default {
         },
         return_none: true
     },
-
-    '発生時': {
+    'メニュー項目作成': { // @メニュー項目を作成して返す // @めにゅーこうもくさくせい
+        type: 'func',
+        josi: [['から','の']],
+        pure: true,
+        fn: function (popts, sys) {
+            const convertMenu = (opts, template) => {
+                const tbl = sys.__enako3.convertMenuTemplate
+                for (const popts of template) {
+                    const opt = {}
+                    sys.__enako3.convertOptions(opt, tbl, popts, (opt, key, value) => {
+                        if (key === 'submenu' || key === 'SUBMENU' || key === 'サブメニュー') {
+                            opt['submenu'] = []
+                            convertMenu(opt['submenu'], value)
+                        }
+                    })
+                    opts.push(opt)
+                }
+            }
+            const opts = []
+            convertMenu(opts, [popts])
+            return new MenuItem(opts[0])
+        },
+    },
+    // @Electronのイベント処理
+    '発生時': { // @対象にて指定のイベントが発生した時の処理を登録する // @はっせいしたとき
         type: 'func',
         josi: [['で'],['の'],['']],
         pure: true,
@@ -347,7 +556,7 @@ export default {
         },
         return_none: true
     },
-    '単発発生時': {
+    '単発発生時': { // @対象にて指定のイベントが発生した時の処理を登録する。イベント発生時に自動削除される // @たんぱつはっせいしたとき
         type: 'func',
         josi: [['で'],['の'],['']],
         pure: true,
@@ -356,7 +565,7 @@ export default {
         },
         return_none: true
     },
-    '呼出時': {
+    '呼出時': { // @対象にて指定のInvoke呼び出しを受けた時の処理を登録する(evt, ...args) // @よびだされたとき
         type: 'func',
         josi: [['で'],['の'],['']],
         pure: true,
@@ -365,7 +574,7 @@ export default {
         },
         return_none: true
     },
-    '呼出': {
+    '呼出': { // @対象のInvokeを呼び出す // @よびだす
         type: 'func',
         josi: [['の'],['','を'],['で']],
         pure: true,
@@ -373,43 +582,7 @@ export default {
             return obj.invoke(type, ...args)
         }
     },
-
-    'データ受信時': {
-        type: 'func',
-        josi: [['で']],
-        pure: true,
-        fn: function (callback, sys) {
-            ipcMain.on('renderer-send', callback)
-        },
-        return_none: true
-    },
-    'データ呼出時': {
-        type: 'func',
-        josi: [['で'],['の']],
-        pure: true,
-        fn: function (callback, sys) {
-            ipcMain.handle('renderer-invoke', callback)
-        },
-        return_none: true
-    },
-    'データ送信': {
-        type: 'func',
-        josi: [['に'],['で'],['を']],
-        pure: true,
-        fn: function (obj, key, data, sys) {
-            obj.send('main-send', key, data)
-        },
-        return_none: true
-    },
-    'データ呼出': {
-        type: 'func',
-        josi: [['に'],['で'],['を']],
-        pure: true,
-        fn: function (obj, key, data, sys) {
-            return obj.invoke('main-invoke', key, data)
-        }
-    },
-
+    // @Electronのshell
     'URL開': {
         type: 'func',
         josi: [['を','の']],
@@ -419,7 +592,154 @@ export default {
         },
         return_none: true
     },
-
+    // @Electronのdialog
+    'ファイル選択': { // @ファイルを選択するダイアログを表示して結果を返す // @ふぁいるせんたく
+        type: 'func',
+        josi: [['に'],['で']],
+        pure: true,
+        asyncFn: true,
+        fn: function (win, popts, sys) {
+            const opts = Object.assing({}, popts)
+            opts.properties.push('openFile')
+            return dialog.showOpenDialog(win, opts)
+        }
+    },
+    'フォルダ選択': { // @フォルダを選択するダイアログを表示して結果を返す // @ふぉるだせんたく
+        type: 'func',
+        josi: [['に'],['で']],
+        pure: true,
+        asyncFn: true,
+        fn: function (win, popts, sys) {
+            const opts = Object.assing({}, popts)
+            opts.properties.push('openDirectory')
+            return dialog.showOpenDialog(win, opts)
+        }
+    },
+    '保存ファイル選択': { // @ファイルを保存するためのダイアログを表示して結果を返す // @ほぞんふぁいるせんたく
+        type: 'func',
+        josi: [['に'],['で']],
+        pure: true,
+        asyncFn: true,
+        fn: function (win, opts, sys) {
+            return dialog.showSaveDialog(win, opts)
+        }
+    },
+    // @Electronのscreen
+    'カーソル絶対位置取得': { // @マウスポインタの絶対位置をDIPポイント単位で返す // @かーそるぜったいいちしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return screen.getCursorScreenPoint()
+        }
+    },
+    '主モニター取得': { // @主画面に指定されているモニターのDisplayを返す // @しゅもにたーしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return screen.getPrimaryDisplay()
+        }
+    },
+    '全モニター取得': { // @全てのモニターをDisplayの配列で返す // @ぜんもにたーしゅとく
+        type: 'func',
+        josi: [],
+        pure: true,
+        fn: function (sys) {
+            return screen.getAllDisplays()
+        }
+    },
+    '付近モニター取得': { // @指定した点に最も近いモニターのDisplayを返す // @ふきんもにたーしゅとく
+        type: 'func',
+        josi: [['の','から']],
+        pure: true,
+        fn: function (p, sys) {
+            const point = sys.__enako3.p2point(p)
+            return screen.getDisplayNearestPoint(point)
+        }
+    },
+    '該当モニター取得': { // @指定した矩形に最も近いモニターのDisplayを返す // @がいとうもにたーしゅとく
+        type: 'func',
+        josi: [['の','から']],
+        pure: true,
+        fn: function (r, sys) {
+            const rect = sys.__enako3.r2rect(r)
+            return screen.getDisplayMatching(rect)
+        }
+    },
+    'PX2DIP点変換': { // @Pointを物理的な単位からDIP単位に変換して返す // @PX2DIPてんへんかん
+        type: 'func',
+        josi: [['の','から']],
+        pure: true,
+        fn: function (p, sys) {
+            const point = sys.__enako3.p2point(p)
+            return screen.screenToDipPoint(point)
+        }
+    },
+    'DIP2PX点変換': { // @PointをDIP単位から物理的な単位に変換して返す // @DIP2PXてんへんかん
+        type: 'func',
+        josi: [['の','から']],
+        pure: true,
+        fn: function (p, sys) {
+            const point = sys.__enako3.p2point(p)
+            return screen.dipToScreenPoint(point)
+        }
+    },
+    'PX2DIP矩形変換': { // @Rectangleを物理的な単位からDIP単位に変換して返す。DPIは指定したウインドウと相対的に計算する // @PX2DIPくけいへんかん
+        type: 'func',
+        josi: [['の','から'],['で']],
+        pure: true,
+        fn: function (r, win, sys) {
+            const rect = sys.__enako3.r2rect(r)
+            return screen.screenToDipRect(win, rect)
+        }
+    },
+    'DIP2PXP矩形変換': { // @RectangleをDIP単位から物理的な単位に変換して返す。DPIは指定したウインドウと相対的に計算する // @DIP2PXくけいへんかん
+        type: 'func',
+        josi: [['の','から'],['で']],
+        pure: true,
+        fn: function (r, win, sys) {
+            const rect = sys.__enako3.r2rect(r)
+            return screen.dipToScreenRect(win, rect)
+        }
+    },
+    // @Electronのユーザ用IPC通信
+    'データ受信時': { // @レンダラからのデータ送信を受けた時の処理を登録する(evt, key, msg) // @でーたじゅしんしたとき
+        type: 'func',
+        josi: [['で']],
+        pure: true,
+        fn: function (callback, sys) {
+            ipcMain.on('renderer-send', callback)
+        },
+        return_none: true
+    },
+    'データ呼出時': { // @レンダラからの呼び出しを受けた時の処理を登録する(evt, key, msg) // @でーたよびだされたとき
+        type: 'func',
+        josi: [['で'],['の']],
+        pure: true,
+        fn: function (callback, sys) {
+            ipcMain.handle('renderer-invoke', callback)
+        },
+        return_none: true
+    },
+    'データ送信': { // @レンダラにデータを送信する(webContent, key, data) // @でーたそうしん
+        type: 'func',
+        josi: [['に'],['で'],['を']],
+        pure: true,
+        fn: function (obj, key, data, sys) {
+            obj.send('main-send', key, data)
+        },
+        return_none: true
+    },
+    'データ呼出': { // @レンダラにデータを呼び出す(webContent, key, data) // @でーたよびだし
+        type: 'func',
+        josi: [['に'],['で'],['を']],
+        pure: true,
+        fn: function (obj, key, data, sys) {
+            return obj.invoke('main-invoke', key, data)
+        }
+    },
+    // @ElectronのNode側の標準機能セット
     '標準API登録': {
         type: 'func',
         josi: [],
@@ -559,14 +879,5 @@ export default {
            })
         },
         return_none: true
-    },
-
-    'PRELOAD作成': {
-        type: 'func',
-        josi: [['から','を'], ['に']],
-        pure: true,
-        fn: function (data, file, sys) {
-            
-        }
     },
 }
