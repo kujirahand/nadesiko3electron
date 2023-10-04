@@ -715,7 +715,7 @@ export default {
     },
     'データ呼出時': { // @レンダラからの呼び出しを受けた時の処理を登録する(evt, key, msg) // @でーたよびだされたとき
         type: 'func',
-        josi: [['で'],['の']],
+        josi: [['で', 'の']],
         pure: true,
         fn: function (callback, sys) {
             ipcMain.handle('renderer-invoke', callback)
