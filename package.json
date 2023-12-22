@@ -1,7 +1,7 @@
 {
   "name": "nadesiko3electron",
   "productName": "nadesiko3",
-  "version": "3.4.21",
+  "version": "3.4.24",
   "description": "Nadesiko3 packager for electron",
   "main": "start.cjs",
   "type": "module",
@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/kujirahand/nadesiko3electron#readme",
   "devDependencies": {
-    "electron": "^23.1.3",
-    "electron-packager": "^17.1.1"
+    "electron": "^28.1.0",
+    "electron-packager": "^17.1.2"
   },
   "dependencies": {
     "iconv-lite": "^0.6.3",
