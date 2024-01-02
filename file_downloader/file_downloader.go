@@ -67,6 +67,7 @@ func ungzip(gzfile, savefile string) error {
 	// GZipファイルを開く
 	gzippedFile, err := os.Open(gzfile)
 	if err != nil {
+		fmt.Println("Ungzip error, could not open:", gzfile, err)
 		return err
 	}
 	defer gzippedFile.Close()
@@ -74,6 +75,7 @@ func ungzip(gzfile, savefile string) error {
 	// GZipリーダーを作成
 	gzipReader, err := gzip.NewReader(gzippedFile)
 	if err != nil {
+		fmt.Println("Ungzip error, could not read:", gzfile, err)
 		return err
 	}
 	defer gzipReader.Close()
@@ -81,12 +83,14 @@ func ungzip(gzfile, savefile string) error {
 	// 解凍して保存
 	outputFile, err := os.Create(savefile)
 	if err != nil {
+		fmt.Println("Ungzip error, could not create:", savefile, err)
 		return err
 	}
 	defer outputFile.Close()
 
 	_, err = io.Copy(outputFile, gzipReader)
 	if err != nil {
+		fmt.Println("Ungzip error, could not ungzip:", gzfile, err)
 		return err
 	}
 
@@ -202,8 +206,10 @@ func main() {
 	// ファイルをダウンロードする
 	for i := 0; i < info.Count; i++ {
 		url := fmt.Sprintf("%s/parts_%s_%02d.bin.gz", info.Url, info.FileName, i)
-		saveFileGz := fmt.Sprintf("%s/parts_%s_%02d.bin.gz", outDir, info.FileName, i)
-		saveFileBin := fmt.Sprintf("%s/parts_%s_%02d.bin", outDir, info.FileName, i)
+		saveFileNameGz := fmt.Sprintf("parts_%s_%02d.bin.gz", info.FileName, i)
+		saveFileGz := filepath.Join(outDir, saveFileNameGz)
+		saveFileNameBin := fmt.Sprintf("parts_%s_%02d.bin", info.FileName, i)
+		saveFileBin := filepath.Join(outDir, saveFileNameBin)
 		if fileExists(saveFileGz) {
 			fmt.Printf("- skip : %s\n", filepath.Base(saveFileGz))
 		} else {
@@ -214,8 +220,9 @@ func main() {
 			}
 		}
 		if err := ungzip(saveFileGz, saveFileBin); err != nil {
-			fmt.Println("Ungzip Error:", err)
-			fmt.Println("ta:", err)
+			fmt.Println("[Ungzip.Error]:", err)
+			fmt.Println("- gz :", saveFileGz)
+			fmt.Println("- bin:", saveFileBin)
 			return
 		} else {
 			fmt.Printf("| Ungzip : %s\n", filepath.Base(saveFileBin))
@@ -231,7 +238,8 @@ func main() {
 	defer outFileHandle.Close()
 	// 分割ファイルを結合
 	for i := 0; i < info.Count; i++ {
-		partFile := fmt.Sprintf("%s/parts_%s_%02d.bin", outDir, info.FileName, i)
+		partName := fmt.Sprintf("parts_%s_%02d.bin", info.FileName, i)
+		partFile := filepath.Join(outDir, partName)
 		inFileHandle, err := os.Open(partFile)
 		if err != nil {
 			fmt.Printf("ファイル%sを開けませんでした: %v\n", partFile, err)
@@ -253,7 +261,7 @@ func main() {
 	if ext == ".zip" {
 		fmt.Println("| これからZIPファイルを解凍します。少々お待ちください。")
 		// 結合したZIPファイルを解凍する
-		unzipDir := fmt.Sprintf("%s/%s", rootDir, info.FileName[:len(info.FileName)-len(filepath.Ext(info.FileName))])
+		unzipDir := filepath.Join(rootDir, fmt.Sprintf("%s", info.FileName[:len(info.FileName)-len(filepath.Ext(info.FileName))]))
 		if err := unzip(outFile, unzipDir); err != nil {
 			fmt.Println("ZIPファイルの解凍に失敗しました:", err)
 			return
@@ -263,7 +271,7 @@ func main() {
 		fmt.Printf("output directory: %s\n", unzipDir)
 		fmt.Println(line)
 	} else {
-		targetFile := fmt.Sprintf("%s/%s", rootDir, info.FileName)
+		targetFile := filepath.Join(rootDir, info.FileName)
 		FileCopy(outFile, targetFile)
 		fmt.Println(line)
 		fmt.Println("ファイルをコピーしました。")
