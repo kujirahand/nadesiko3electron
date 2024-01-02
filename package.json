@@ -9,8 +9,7 @@
     "start": "electron .",
     "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
     "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",
-    "build:mac-x64": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite",
-    "build:mac-arm64": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=arm64 --overwrite"
+    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64,arm64 --overwrite"
   },
   "repository": {
     "type": "git",
