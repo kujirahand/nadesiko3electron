@@ -1,14 +1,16 @@
 {
   "name": "nadesiko3electron",
   "productName": "nadesiko3",
-  "version": "3.4.24",
+  "version": "3.4.27",
   "description": "Nadesiko3 packager for electron",
   "main": "start.cjs",
   "type": "module",
   "scripts": {
     "start": "electron .",
+    "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
     "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",
-    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite"
+    "build:mac-x64": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64 --overwrite",
+    "build:mac-arm64": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=arm64 --overwrite"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
     "iconv-lite": "^0.6.3",
     "node-fetch": "^3.3.2",
     "opener": "^1.5.2",
-    "shell-quote": "^1.8.0"
+    "shell-quote": "^1.8.0",
+    "nadesiko3": "3.4.27"
   }
 }

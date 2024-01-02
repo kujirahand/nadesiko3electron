@@ -769,13 +769,15 @@ export default {
                   preload: path.join(__dirname, 'preload_nako3api.cjs')
                 }
               })
-              win.loadURL('file://' + path.join(__dirname, '..', 'webapp', 'index.html'))
+              const html_path = path.join(__dirname, '..', 'webapp', 'index.html')
+              console.log('loadURL: ', html_path)
+              win.loadURL('file://' + html_path)
               win.on('closed', () => {
                 win = null
               })
               // 新しいウィンドウを開こうとした際の処理
               win.webContents.on('new-window', (e, url) => {
-                console.log(url)
+                console.log('new-window:', url)
                 shell.openExternal(url)
               });
               win.webContents.on('will-navigate', (e, url) => {
