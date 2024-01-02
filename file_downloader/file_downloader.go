@@ -53,7 +53,6 @@ func readInfoJson() (*InfoJson, error) {
 		fmt.Println("Error:", err)
 		return nil, err
 	}
-	fmt.Println(string(text))
 	// JSON文字列を構造体にパース
 	var info InfoJson
 	if err := json.Unmarshal([]byte(text), &info); err != nil {
@@ -98,12 +97,14 @@ func unzip(zipfile, destDir string) error {
 	// ZIPファイルを開く
 	r, err := zip.OpenReader(zipfile)
 	if err != nil {
+		fmt.Println("ZIPファイルの読み込みに失敗しました:", err)
 		return err
 	}
 	defer r.Close()
 
-	// デストディレクトリが存在しない場合は作成
+	// 保存ディレクトリが存在しない場合は作成
 	if err := os.MkdirAll(destDir, os.ModePerm); err != nil {
+		fmt.Println("保存ディレクトリの作成に失敗しました:", err)
 		return err
 	}
 
@@ -114,10 +115,28 @@ func unzip(zipfile, destDir string) error {
 			return err
 		}
 		defer rc.Close()
+		fmt.Println("- ", f.Name)
+		fi := f.FileInfo()
 
 		// 出力ファイルを作成
-		outFile, err := os.Create(filepath.Join(destDir, f.Name))
+		subdir := filepath.Dir(f.Name)
+		// fmt.Println("-- subdir:", subdir)
+		if subdir != "." && subdir != "" {
+			target_dir := filepath.Join(destDir, subdir)
+			if !fileExists(target_dir) {
+				os.MkdirAll(target_dir, 0755)
+			}
+		}
+		target_path := filepath.Join(destDir, f.Name)
+		if fi.IsDir() {
+			// ディレクトリなら何もしない
+			continue
+		}
+		// ファイルなら保存
+		outFile, err := os.Create(target_path)
 		if err != nil {
+			fmt.Println("ファイルの作成に失敗しました:", err)
+			fmt.Println("path:", target_path)
 			return err
 		}
 		defer outFile.Close()
@@ -130,6 +149,11 @@ func unzip(zipfile, destDir string) error {
 	}
 
 	return nil
+}
+
+func fileExists(filePath string) bool {
+	_, err := os.Stat(filePath)
+	return !os.IsNotExist(err)
 }
 
 // FileCopy 関数: コピー元ファイルからコピー先ファイルへのファイルコピー
@@ -150,39 +174,51 @@ func FileCopy(sourceFile, destinationFile string) error {
 }
 
 func main() {
+	line := "=================================================="
+	fmt.Println(line)
+	fmt.Println("| File Downloader")
+	fmt.Println(line)
 	// "info.json"を読む
 	info, err := readInfoJson()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
+	fmt.Println("URL:", info.Url)
+	fmt.Println("File Name:", info.FileName)
+	// check path
 	executablePath, err := os.Executable()
 	if err != nil {
 		fmt.Println("実行ファイルのパスを取得できませんでした:", err)
 		return
 	}
-	fmt.Printf("executablePath: %s\n", executablePath)
 	rootDir := filepath.Dir(executablePath)
 	// テンポラリフォルダを作る
 	outDir := filepath.Join(rootDir, "temp")
 	if _, err := os.Stat(outDir); os.IsNotExist(err) {
 		os.MkdirAll(outDir, 0755)
 	}
+	fmt.Println("Temp Directory:", outDir)
 	// ファイルをダウンロードする
 	for i := 0; i < info.Count; i++ {
 		url := fmt.Sprintf("%s/parts_%s_%02d.bin.gz", info.Url, info.FileName, i)
 		saveFileGz := fmt.Sprintf("%s/parts_%s_%02d.bin.gz", outDir, info.FileName, i)
 		saveFileBin := fmt.Sprintf("%s/parts_%s_%02d.bin", outDir, info.FileName, i)
-		fmt.Printf("+ url from: %s\n", url)
-		fmt.Printf("| save to : %s\n", filepath.Base(saveFileGz))
-		if err := download(url, saveFileGz); err != nil {
-			fmt.Println("Error:", err)
-			return
+		if fileExists(saveFileGz) {
+			fmt.Printf("- skip : %s\n", filepath.Base(saveFileGz))
+		} else {
+			fmt.Printf("- download : %s\n", filepath.Base(saveFileGz))
+			if err := download(url, saveFileGz); err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
 		}
 		if err := ungzip(saveFileGz, saveFileBin); err != nil {
 			fmt.Println("Ungzip Error:", err)
 			fmt.Println("ta:", err)
 			return
+		} else {
+			fmt.Printf("| Ungzip : %s\n", filepath.Base(saveFileBin))
 		}
 	}
 	// ファイルを結合する
@@ -209,22 +245,29 @@ func main() {
 			return
 		}
 	}
-	fmt.Println("ファイルの結合が完了しました")
-	fmt.Printf("path: %s\n", outFile)
+	fmt.Println(line)
+	fmt.Println("| ファイルの結合が完了しました!!")
+	fmt.Printf("| path: %s\n", outFile)
+	fmt.Println(line)
 	ext := filepath.Ext(outFile)
 	if ext == ".zip" {
+		fmt.Println("| これからZIPファイルを解凍します。少々お待ちください。")
 		// 結合したZIPファイルを解凍する
 		unzipDir := fmt.Sprintf("%s/%s", rootDir, info.FileName[:len(info.FileName)-len(filepath.Ext(info.FileName))])
 		if err := unzip(outFile, unzipDir); err != nil {
 			fmt.Println("ZIPファイルの解凍に失敗しました:", err)
 			return
 		}
+		fmt.Println(line)
 		fmt.Println("ZIPファイルの解凍が完了しました")
 		fmt.Printf("output directory: %s\n", unzipDir)
+		fmt.Println(line)
 	} else {
 		targetFile := fmt.Sprintf("%s/%s", rootDir, info.FileName)
 		FileCopy(outFile, targetFile)
+		fmt.Println(line)
 		fmt.Println("ファイルをコピーしました。")
 		fmt.Printf("path: %s\n", targetFile)
+		fmt.Println(line)
 	}
 }
