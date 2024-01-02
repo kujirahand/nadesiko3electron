@@ -17,6 +17,50 @@ type InfoJson struct {
 	Count    int    `json:"count"`
 }
 
+func downloadFile(url, outputPath string) error {
+	response, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("HTTP GET error: %v", err)
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		return fmt.Errorf("HTTP status code: %d", response.StatusCode)
+	}
+	file, err := os.Create(outputPath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	totalSize := response.ContentLength
+	downloadedSize := 0
+
+	bufferSize := 1024 * 1024 * 8
+	buffer := make([]byte, bufferSize)
+
+	for {
+		n, err := response.Body.Read(buffer)
+		if err != nil && err != io.EOF {
+			return err
+		}
+
+		if n == 0 {
+			break
+		}
+
+		downloadedSize += n
+		progress := float64(downloadedSize) / float64(totalSize) * 100.0
+		fmt.Printf("\rDownloading ... %3d%%", int(progress))
+
+		_, err = file.Write(buffer[:n])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func download(url string, filePath string) error {
 	// HTTP GETリクエストを送信してファイルをダウンロード
 	fmt.Printf("download: %s\n", filePath)
@@ -214,7 +258,7 @@ func main() {
 			fmt.Printf("- skip : %s\n", filepath.Base(saveFileGz))
 		} else {
 			fmt.Printf("- download : %s\n", filepath.Base(saveFileGz))
-			if err := download(url, saveFileGz); err != nil {
+			if err := downloadFile(url, saveFileGz); err != nil {
 				fmt.Println("Error:", err)
 				return
 			}
