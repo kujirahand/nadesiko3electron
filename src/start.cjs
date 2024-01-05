@@ -2,11 +2,11 @@ const path = require('path')
 global.require = require
 global.__dirname = __dirname
 try {
-    import('./src/enako3.mjs').then(() => {
+    import('./enako3.mjs').then(() => {
         console.log("[start.cjs] ok.")
     }).catch((e) => {
-        console.log('[ERROR] start.cjs', e)
+        console.error('[ERROR::import(enako3.mjs)] start.cjs', e)
     })
 } catch (e) {
-    console.log('[ERROR] start.cjs', e)
+    console.error('[ERROR::catch] start.cjs', e)
 }

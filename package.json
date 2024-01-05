@@ -3,13 +3,13 @@
   "productName": "nadesiko3",
   "version": "3.4.27",
   "description": "Nadesiko3 packager for electron",
-  "main": "start.cjs",
+  "main": "src/start.cjs",
   "type": "module",
   "scripts": {
     "start": "electron .",
     "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
-    "build:win": "electron-packager . --icon=res/nako.ico --platform=win32 --arch=x64,ia32 --overwrite",
-    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64,arm64 --overwrite"
+    "build:win": "win-pack.bat",
+    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64,arm64 --overwrite --ignore=node_modules,file_splitter,file_downloader,output,nadesiko3-win32-ia32.zip,nadesiko-win32.zip"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/kujirahand/nadesiko3electron#readme",
   "devDependencies": {
-    "electron": "^28.1.0",
+    "electron": "^28.1.1",
     "electron-packager": "^17.1.2"
   },
   "dependencies": {

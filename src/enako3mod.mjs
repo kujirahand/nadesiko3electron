@@ -3,8 +3,8 @@
  * 実際には enako3.mjs から読み込まれる
  */
 import fs from 'fs';
-import fse from 'fs-extra';
-import { exec } from 'child_process';
+// import fse from 'fs-extra';
+// import { exec } from 'child_process';
 import path from 'path';
 import { NakoCompiler, newCompilerOptions } from 'nadesiko3/core/src/nako3.mjs';
 import { NakoImportError } from 'nadesiko3/core/src/nako_errors.mjs';

@@ -1,13 +1,13 @@
 command.json.js:
-  md5(hex): 21061c421516f62d3ca1d28381a2f73d
-  sha256(hex): a6cb1ff5c0d5f74ed9bbfec18fdaf4e54ac07c40e438172eee0df1dfc94a6c62
-  sha256(base64): pssf9cDV907Zu/7Bj9r05UrAfEDkOBcu7g3x38lKbGI=
-  sha512(base64): VWse4UnLJdqshARVFtdO/78vYUsCuGEJq0eBlQSd1Jl+9oiUhBnfWZKYaiw4azDYiaxm7jSPX0IchvF9GLjUww==
+  md5(hex): 0b16cdb38eb73bad0664af8cf4849985
+  sha256(hex): fffc11da7bc158b9668c22d9ac211039a082d6aec938fc63cb8d0cbdbd98a96d
+  sha256(base64): //wR2nvBWLlmjCLZrCEQOaCC1q7JOPxjy40Mvb2YqW0=
+  sha512(base64): 5cdBOTh0LJhOKiAaCglm8yuJvxnCCs6NPTyUTKpemBMHF3iK9r28vr87EW0UO0po2CsreVK27J3Y+Cjk8JRM6w==
 editor.js:
-  md5(hex): 962a38d11a5dbed8862636a70b6a8de0
-  sha256(hex): ad3cacccfaca3085ea37657811d9e4488c5c85e0b97de3283f18624e6cac769f
-  sha256(base64): rTyszPrKMIXqN2V4EdnkSIxcheC5feMoPxhiTmysdp8=
-  sha512(base64): b+YEoSAoQ2Xmdts+75seadjHm5vjw2kEOJxvoWyJz1tGghMG1YOFmHUcCXOqjNIvNv1voOlFajp64xFh7L/+PA==
+  md5(hex): 80ca359e980c58db082ad9dcc6e5694e
+  sha256(hex): e0953fc4c9e3277dcc200047c97e5efaffc39c025e787f040bef28d0e1ccf595
+  sha256(base64): 4JU/xMnjJ33MIABHyX5e+v/DnAJeeH8EC+8o0OHM9ZU=
+  sha512(base64): Z/9K7oPD+5XoP28eG+GG8yp6uJL3KFJQRkU3ablJjxxKAO2uSQA7QubvS+CNYSUJrxlnNHfnk/3uKS1+h0/B7Q==
 nako_gen_async.js:
   md5(hex): 42d5fed01039474ff197d449c27c84ad
   sha256(hex): d78d516b32b551c4a51ceef529568760783c84f6c5d90029fa9b38922d5b4430
@@ -29,10 +29,10 @@ plugin_kansuji.js:
   sha256(base64): tLr7GpErBPCLNxzkWF2V9+j4uD8AQtuGCWF8uIRpjm0=
   sha512(base64): 5/TRx8Ke69YV9s8M67sOWrJmhhHK4MMLbMJh5nKg3oV8spmOOTn6tXl/TxYk8YWkTurOTCaXtRFuR9h2yEDt7w==
 plugin_markup.js:
-  md5(hex): 3f37fbd2cdd94d9d4045a1404499db10
-  sha256(hex): fcecac45412d2d6d332126d0b22df9bb79556046a73a954405d26b28b0ab912c
-  sha256(base64): /OysRUEtLW0zISbQsi35u3lVYEanOpVEBdJrKLCrkSw=
-  sha512(base64): drtjjn0yAtkEIftrvBPeAFfvHo3EccMRWHBf8aF+VAdaOohY3UbFr5eud/BGc592eyxYxNygavBuVqwqktleng==
+  md5(hex): f9961b779665ee79ff3486d27e4bc29d
+  sha256(hex): 9a263ca539a80367ab07d4d35a83f91c2a39f882854531015283cde89d3c0116
+  sha256(base64): miY8pTmoA2erB9TTWoP5HCo5+IKFRTEBUoPN6J08ARY=
+  sha512(base64): yQJ1nsb6FM58ElnwqPQjSrmzSpqSgJ2kSPlPmoc51oDrzBQJfdYF9gWic9+9BUD33jJtBDddfMg63VBEsyANSw==
 plugin_turtle.js:
   md5(hex): d6413fac53e7c5e93168729febb2bf17
   sha256(hex): 335d114291d2aaf9d6558ca7f07b6f7038855d6de6d2a7dd45fe69d49fc2a6aa
