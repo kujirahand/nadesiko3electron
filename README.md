@@ -17,7 +17,7 @@
 そして、解凍したら下記のファイルを編集します。
 
 - (Windows) `resources/app/webapp/main.nako3`
-- (macOS) `Contents/Resources/app/webapp/main.nako3`
+- (macOS) `nadesiko3/Contents/Resources/app/webapp/main.nako3`
 
 このファイルに実行したいなでしこのプログラムを記述します。
 
