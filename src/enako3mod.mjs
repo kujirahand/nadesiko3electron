@@ -3,27 +3,24 @@
  * 実際には enako3.mjs から読み込まれる
  */
 import fs from 'fs';
-// import fse from 'fs-extra';
-// import { exec } from 'child_process';
 import path from 'path';
 import { NakoCompiler, newCompilerOptions } from 'nadesiko3/core/src/nako3.mjs';
 import { NakoImportError } from 'nadesiko3/core/src/nako_errors.mjs';
 import nakoVersion from 'nadesiko3/src/nako_version.mjs';
 import PluginNode from 'nadesiko3/src/plugin_node.mjs';
 import PluginElectronNode from './plugin_electron_node.mjs';
-import app from 'nadesiko3/src/commander_ja.mjs';
 import fetch from 'node-fetch';
-import { NakoGenOptions } from 'nadesiko3/core/src/nako_gen.mjs';
 // __dirname のために
 import url from 'url';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 /** ENako3 */
 export class ENako3 extends NakoCompiler {
     constructor(opts = { nostd: false }) {
         super({ useBasicPlugin: !opts.nostd });
         this.debug = false;
-        this.filename = path.join(__dirname, '..', 'node.nako3');
+        this.filename = path.join(__dirname, 'node.nako3');
         this.version = nakoVersion.version;
         this.addPluginFile('PluginNode', path.join(__dirname, 'plugin_node.mjs'), PluginNode);
         this.addPluginFile('PluginElectronNode', path.join(__dirname, 'plugin_electron_node.mjs'), PluginElectronNode);
@@ -46,6 +43,7 @@ export class ENako3 extends NakoCompiler {
         };
         return args;
     }
+
     // 実行する
     async execCommand() {
         // コマンドを解析

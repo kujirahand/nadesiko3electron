@@ -8,8 +8,8 @@
   "scripts": {
     "start": "electron .",
     "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
-    "build:win": "win-pack.bat",
-    "build:mac": "electron-packager . --icon=res/AppIcon.icns --platform=darwin --arch=x64,arm64 --overwrite --ignore=node_modules,file_splitter,file_downloader,output,nadesiko3-win32-ia32.zip,nadesiko-win32.zip"
+    "build:win": "batch/win-pack.bat",
+    "build:mac": "batch/mac-pack.sh"
   },
   "repository": {
     "type": "git",

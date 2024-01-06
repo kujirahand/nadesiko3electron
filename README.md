@@ -25,7 +25,10 @@
 
 ## (詳細な方法) コマンドラインから最新版をビルドする方法
 
-最初に、[Node.js](https://nodejs.org/ja/)をインストールしてください。インストール後、コマンドライン(PowerShellまたはTerminal.app)で以下を実行しましょう。
+最初に、[Node.js](https://nodejs.org/ja/)をインストールしてください。インストール後、コマンドライン(PowerShellまたはTerminal.app)で以下を実行しましょう。なお、ElectronとNode.jsのバージョンは指定の組合せを指定する必要があります。
+
+- Node.jsのバージョンは、[.nvmrc](.nvmrc)に記述しています。特定のバージョンが必要です。なお、[nvm](https://github.com/nvm-sh/nvm)を使うと.nvmrcのバージョンを見て、自動的にNode.jsのバージョンを変更してくれます。
+- Electronのバージョンは、package.jsonに記述しており、`npm install`で自動的にインストールされます。
 
 ```
 git clone https://github.com/kujirahand/nadesiko3electron.git
@@ -35,12 +38,13 @@ npm install
 
 そして、webapp/main.nako3 を編集します。これがメインファイルです。
 このファイルに実行したいなでしこのプログラムを記述します。
-
 それから、Windowsなら`npm run build:win`を実行します。macOSなら`npm run build:mac`を実行します。
 
-```
-$ npm run build:win
-$ npm run build:mac
+```sh
+# Windowsの場合
+npm run build:win
+# macOSの場合
+npm run build:mac
 ```
 
 すると配布用の実行ファイルが生成されます。
