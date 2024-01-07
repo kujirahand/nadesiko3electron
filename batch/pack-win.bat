@@ -7,7 +7,7 @@ cd %root_dir%
 
 rem    --arch=x64,ia32 ^
 npx electron-packager . ^
-    --icon=res%root_dir%/nako.ico ^
+    --icon=%root_dir%\res\nako.ico ^
     --platform=win32 ^
     --arch=x64 ^
     --overwrite ^

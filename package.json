@@ -8,8 +8,8 @@
   "scripts": {
     "start": "electron .",
     "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
-    "build:win": "batch/win-pack.bat",
-    "build:mac": "batch/mac-pack.sh"
+    "build:win": ".\\batch\\pack-win.bat",
+    "build:mac": "batch/pack-mac.sh"
   },
   "repository": {
     "type": "git",
