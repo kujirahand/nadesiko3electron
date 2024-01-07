@@ -22,6 +22,6 @@ call npm run build
 xcopy release\* "%NAKO3WEB_DIR%" /I /Q /Y /S
 del "%NAKO3WEB_DIR%\stats.json"
 @echo "copy nadesiko3 for node folder from src and core/src"
-xcopy src "%NAKO3NODE_DIR%\src" /I /Q /Y /S /EXCLUDE:%ROOT_DIR%exclude_copy.txt
-xcopy core\src "%NAKO3NODE_DIR%\core\src" /I /Q /Y /S /EXCLUDE:%ROOT_DIR%exclude_copy.txt
+xcopy src "%NAKO3NODE_DIR%\src" /I /Q /Y /S /EXCLUDE:%SCRIPT_DIR%exclude_copy.txt
+xcopy core\src "%NAKO3NODE_DIR%\core\src" /I /Q /Y /S /EXCLUDE:%SCRIPT_DIR%exclude_copy.txt
 cd /D "%ROOT_DIR%"
