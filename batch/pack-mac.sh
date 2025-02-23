@@ -4,7 +4,7 @@ SCRIPT_PATH="$(cd "$(dirname "$0")" && pwd)"
 ROOT_PATH="$(cd "$SCRIPT_PATH/.." && pwd)"
 
 cd $ROOT_PATH
-npx electron-packager . \
+npx @electron/packager . \
     --icon="$ROOT_PATH/res/AppIcon.icns" \
     --platform=darwin \
     --arch=x64,arm64 \

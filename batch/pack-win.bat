@@ -6,7 +6,7 @@ set "root_dir=%script_path%\.."
 cd %root_dir%
 
 rem    --arch=x64,ia32 ^
-npx electron-packager . ^
+npx @electron/packager . ^
     --icon=%root_dir%\res\nako.ico ^
     --platform=win32 ^
     --arch=x64 ^
