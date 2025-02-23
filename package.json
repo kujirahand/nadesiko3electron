@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "electron .",
+    "update::nako3": "cnako3 batch/copy_from_local.nako3",
     "build:prepare": "cp -r node_modules/nadesiko3/release/* ./webapp/nadesiko3/",
     "build:win": ".\\batch\\pack-win.bat",
     "build:mac": "batch/pack-mac.sh"
