@@ -703,7 +703,7 @@ export default {
             return screen.dipToScreenRect(win, rect)
         }
     },
-    'DIP2PXP矩形変換': { // @『DIP2PX矩形変換』命令の誤字。互換性のために存在する。 // @DIP2PXくけいへんかん
+    'DIP2PXP矩形変換': { // @『DIP2PX矩形変換』命令の誤字。互換性のために存在する。 // @DIP2PXPくけいへんかん
         type: 'func',
         josi: [['の','から'],['で']],
         pure: true,
