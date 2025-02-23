@@ -1,0 +1,9 @@
+DIR_ROOT＝（母艦パスからパス抽出）からパス抽出。
+「{DIR_ROOT}\nadesiko3\release\*」の全ファイル列挙
+反復：
+　　SRC=対象
+　　F=SRCからファイル名抽出
+　　DES＝「{DIR_ROOT}/nadesiko3electron/webapp/nadesiko3/{F}」
+　　SRCからDESへファイルコピー。
+　　「COPY:{DES}」を表示
+「OK」と表示。
