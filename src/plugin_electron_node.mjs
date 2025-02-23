@@ -694,13 +694,21 @@ export default {
             return screen.screenToDipRect(win, rect)
         }
     },
-    'DIP2PXP矩形変換': { // @RectangleをDIP単位から物理的な単位に変換して返す。DPIは指定したウインドウと相対的に計算する // @DIP2PXくけいへんかん
+    'DIP2PX矩形変換': { // @RectangleをDIP単位から物理的な単位に変換して返す。DPIは指定したウインドウと相対的に計算する // @DIP2PXくけいへんかん
         type: 'func',
         josi: [['の','から'],['で']],
         pure: true,
         fn: function (r, win, sys) {
             const rect = sys.__enako3.r2rect(r)
             return screen.dipToScreenRect(win, rect)
+        }
+    },
+    'DIP2PXP矩形変換': { // @『DIP2PX矩形変換』命令の誤字。互換性のために存在する。 // @DIP2PXくけいへんかん
+        type: 'func',
+        josi: [['の','から'],['で']],
+        pure: true,
+        fn: function (r, win, sys) {
+            sys.__exec('DIP2PX矩形変換', [r, win, sys])
         }
     },
     // @Electronのユーザ用IPC通信

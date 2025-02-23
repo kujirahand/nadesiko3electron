@@ -1,7 +1,7 @@
 {
   "name": "nadesiko3electron",
   "productName": "nadesiko3",
-  "version": "3.4.27",
+  "version": "3.7.2",
   "description": "Nadesiko3 packager for electron",
   "main": "src/start.cjs",
   "type": "module",
@@ -31,6 +31,6 @@
     "node-fetch": "^3.3.2",
     "opener": "^1.5.2",
     "shell-quote": "^1.8.0",
-    "nadesiko3": "3.4.27"
+    "nadesiko3": "3.7.2"
   }
 }
