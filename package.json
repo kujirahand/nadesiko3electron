@@ -24,12 +24,12 @@
   },
   "homepage": "https://github.com/kujirahand/nadesiko3electron#readme",
   "devDependencies": {
-    "electron": "^34.2.0"
+    "electron": "^39.2.1"
   },
   "dependencies": {
-    "@electron/packager": "^18.3.6",
-    "iconv-lite": "^0.6.3",
-    "nadesiko3": "3.7.2",
+    "@electron/packager": "^19.0.1",
+    "iconv-lite": "^0.7.0",
+    "nadesiko3": "3.7.9",
     "node-fetch": "^3.3.2",
     "opener": "^1.5.2",
     "shell-quote": "^1.8.0"

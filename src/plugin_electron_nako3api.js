@@ -3,6 +3,16 @@
  * electronのレンダラプロセスのためのプラグイン
  */
 const PluginElectronNako3api = {
+    'meta': {
+        type: 'const',
+        value: { // プラグインに関する情報を指定する
+        pluginName: 'nadesiko3-electron-api', // プラグインの名前
+        description: 'Electron API', // プラグインの説明
+        pluginVersion: '3.7.9', // プラグインのバージョン
+        nakoRuntime: ['enako'], // 対象ランタイム
+        nakoVersion: '3.7.9' // 要求なでしこバージョン
+        }
+    },
     '初期化': {
         type: 'func',
         josi: [],
